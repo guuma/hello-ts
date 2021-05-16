@@ -26,14 +26,14 @@
 // const printResult = true;
 // let resultPhrase = 'Result';
 
-function padLeft(padding: number | string, input: string) {
-  if (typeof padding === 'number') {
-    return new Array(padding + 1).join(' ') + input;
-  }
-  return padding + input;
-}
+// function padLeft(padding: number | string, input: string) {
+//   if (typeof padding === 'number') {
+//     return new Array(padding + 1).join(' ') + input;
+//   }
+//   return padding + input;
+// }
 
-console.log(padLeft(3, 'Hello World!!!'));
+// console.log(padLeft(3, 'Hello World!!!'));
 
 // function printAll(strs: string | string[] | null) {
 //   if (strs && typeof strs === 'object') {
@@ -45,32 +45,32 @@ console.log(padLeft(3, 'Hello World!!!'));
 //   }
 // }
 
-function printAll(strs: string | string[] | null) {
-  if (strs) {
-    if (typeof strs === 'object') {
-      for (const s of strs) {
-        console.log(s);
-      }
-    } else if (typeof strs === 'string') {
-      console.log(strs);
-    }
-  }
-}
+// function printAll(strs: string | string[] | null) {
+//   if (strs) {
+//     if (typeof strs === 'object') {
+//       for (const s of strs) {
+//         console.log(s);
+//       }
+//     } else if (typeof strs === 'string') {
+//       console.log(strs);
+//     }
+//   }
+// }
 
-printAll(['']);
-printAll('');
+// printAll(['']);
+// printAll('');
 
-function logValue(x: Date | string) {
-  if(x instanceof Date) {
-    console.log(x.toUTCString())
-  } else {
-    console.log(x.toUpperCase())
-  }
-}
+// function logValue(x: Date | string) {
+//   if(x instanceof Date) {
+//     console.log(x.toUTCString())
+//   } else {
+//     console.log(x.toUpperCase())
+//   }
+// }
 
-function isFish(pet: Fish | Bird): pet is Fish {
-  return (pet as Fish).swim !== undefined;
-}
+// function isFish(pet: Fish | Bird): pet is Fish {
+//   return (pet as Fish).swim !== undefined;
+// }
 
 // console.log(typeof ['a', 'b'] === 'object');
 
@@ -82,3 +82,18 @@ function isFish(pet: Fish | Bird): pet is Fish {
 //     return result;
 //   }
 // }
+
+type Combinable = number | string;
+type ConversionDescriptor = 'as-number' | 'as-text';
+
+function combine(input1: Combinable, input2: Combinable, resultConversion: ConversionDescriptor) {
+  let result;
+  if (
+    (typeof input1 === 'number' && typeof input2 == 'number') ||
+    resultConversion === 'as-number'
+  ) {
+    result = +input1 + input2;
+  } else {
+    result = input1.toString() + input2.toString();
+  }
+}
