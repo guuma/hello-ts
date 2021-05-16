@@ -1,84 +1,84 @@
-// const person = {
-//   name: 'yota',
-//   age: 30,
-//   hobbies: []
-// };
-
-// console.log(person);
-
-// function greeter(func: (a: string) => void) {
-//   func('Hello World!!')
+// function combine(input1: number | string, input2: number | string, resultConversion: 'as-number' | 'as-text') {
+//   let result;
+//   if (
+//     (typeof input1 === 'number' && typeof input2 === 'number') ||
+//     resultConversion === 'as-number'
+//   ) {
+//     result = +input1 + +input2;
+//   } else {
+//     result = input1.toString() + input2.toString();
+//   }
+//   return result;
 // }
 
-// function printToConsole(s: string) {
-//   console.log(s)
-// }
+// const combinedAges = combine(30, 26, 'as-number');
+// console.log(combinedAges);
 
-// greeter(printToConsole)
+// const combinedStringAges = combine('30', '26', 'as-number');
+// console.log(combinedStringAges);
 
-// type DescribableFunction = {
-//   description: string;
-//   (someArg: number): boolean;
-// };
+// const combinedNames = combine('Max', 'Annna', 'as-text');
+// console.log(combinedNames);
 
-// function doSomething(fn: DescribableFunction) {
-//   console.log(`${fn.description} returned ${fn(6)}`);
-// }
+// let number1: number;
+// number1 = 5;
+// const number2 = 2.8;
+// const printResult = true;
+// let resultPhrase = 'Result';
 
-// function firstElement<Type>(arr: Type[]): Type {
-//   return arr[0];
-// }
-
-// function map<Input, Output>(arr: Input[], func: (arg: Input) => Output): Output[] {
-//   return arr.map(func);
-// }
-
-// const arr = ['1', '2', '3'];
-// const parsed = arr.map((n) => parseInt(n));
-
-// console.log(parsed);
-
-// const array = [1, 2, 3];
-
-// array.map((i) => {
-//   console.log(i);
-// });
-
-// function firstElemnt<Type>(arr: Type[]): Type {
-//   return arr[0];
-// }
-
-// const person: {
-//   name: string;
-//   age: number;
-//   hobbies: string[];
-//   role: [number, string];
-// } = {
-//   name: 'yota',
-//   age: 30,
-//   hobbies: ['Sports', 'Cooking'],
-//   role: [2, 'author'],
-// };
-
-// const ADMIN = 0;
-// const READ_ONLY = 1;
-// const AUTHOR = 2;
-
-enum Role {
-  ADMIN,
-  READ_ONLY,
-  AUTHOR,
+function padLeft(padding: number | string, input: string) {
+  if (typeof padding === 'number') {
+    return new Array(padding + 1).join(' ') + input;
+  }
+  return padding + input;
 }
 
-const person = {
-  name: 'yota',
-  age: 30,
-  hobbies: ['Sports', 'Cooking'],
-  role: Role.ADMIN,
-};
+console.log(padLeft(3, 'Hello World!!!'));
 
-if(person.role === Role.ADMIN) {
-  console.log('You are Admin user')
+// function printAll(strs: string | string[] | null) {
+//   if (strs && typeof strs === 'object') {
+//     for (const s of strs) {
+//       console.log(s);
+//     }
+//   } else if (typeof strs === 'string') {
+//     console.log(strs);
+//   }
+// }
+
+function printAll(strs: string | string[] | null) {
+  if (strs) {
+    if (typeof strs === 'object') {
+      for (const s of strs) {
+        console.log(s);
+      }
+    } else if (typeof strs === 'string') {
+      console.log(strs);
+    }
+  }
 }
 
-// person.role.push('admin');
+printAll(['']);
+printAll('');
+
+function logValue(x: Date | string) {
+  if(x instanceof Date) {
+    console.log(x.toUTCString())
+  } else {
+    console.log(x.toUpperCase())
+  }
+}
+
+function isFish(pet: Fish | Bird): pet is Fish {
+  return (pet as Fish).swim !== undefined;
+}
+
+// console.log(typeof ['a', 'b'] === 'object');
+
+// function add(n1: number, n2: number, showResult: boolean, phrase: string) {
+//   const result = n1 + n2;
+//   if(showResult) {
+//     console.log(phrase + result);
+//   } else {
+//     return result;
+//   }
+// }
