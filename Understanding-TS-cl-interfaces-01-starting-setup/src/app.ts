@@ -4,6 +4,12 @@ class Department {
   // name: string;
   protected employees: string[] = [];
 
+  static fiscalYear = 2020;
+
+  static createEmployee(name: string) {
+    return { name: name };
+  }
+
   constructor(private readonly id: string, public name: string) {}
 
   describe(this: Department) {
@@ -33,14 +39,29 @@ class ITDepartment extends Department {
 }
 
 class AccountingDepartment extends Department {
-  reports: string[];
-  constructor(id: string, reports: string[]) {
+  private lastReport: string;
+
+  get mostRecentReport() {
+    if (this.lastReport) {
+      return this.lastReport;
+    }
+    throw new Error('could not find a report');
+  }
+
+  set mostRecentReport(value: string) {
+    if (!value) {
+      throw new Error('Please set the correct value');
+    }
+    this.addReport(value);
+  }
+  constructor(id: string, private reports: string[]) {
     super(id, 'Accounting');
-    this.reports = reports;
+    this.lastReport = reports[0];
   }
 
   addReport(text: string) {
     this.reports.push(text);
+    this.lastReport = text;
   }
 
   printReports() {
@@ -69,8 +90,14 @@ accounting.printReports();
 
 accounting.addEmployee('Max');
 accounting.addEmployee('Manu');
-console.log(accounting);
+accounting.mostRecentReport = 'Something example';
+console.log(accounting.mostRecentReport);
 
+const employee1 = Department.createEmployee('Max');
+
+const fiscalYear = Department.fiscalYear;
+
+console.log(employee1, fiscalYear);
 // it.printEmployeeInfomation();
 
 // const accountingCopy = { name: 'Dummy', describe: accounting.describe };
