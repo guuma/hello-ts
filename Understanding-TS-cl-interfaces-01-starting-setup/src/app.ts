@@ -1,6 +1,6 @@
 // Code goes here!
 
-class Department {
+abstract class Department {
   // name: string;
   protected employees: string[] = [];
 
@@ -10,11 +10,9 @@ class Department {
     return { name: name };
   }
 
-  constructor(private readonly id: string, public name: string) {}
+  constructor(protected readonly id: string, public name: string) {}
 
-  describe(this: Department) {
-    console.log(`Department(${this.id}): ${this.name}`);
-  }
+  abstract describe(this: Department): void;
 
   addEmployee(name: string) {
     // validation etc
@@ -35,6 +33,10 @@ class ITDepartment extends Department {
   constructor(id: string, admins: string[]) {
     super(id, 'IT');
     this.admins = admins;
+  }
+
+  describe() {
+    console.log(`IT Department - ID: ${this.id}`);
   }
 }
 
@@ -57,6 +59,10 @@ class AccountingDepartment extends Department {
   constructor(id: string, private reports: string[]) {
     super(id, 'Accounting');
     this.lastReport = reports[0];
+  }
+
+  describe() {
+    console.log(`Accounting Department - ID: ${this.id}`);
   }
 
   addReport(text: string) {
@@ -86,20 +92,22 @@ it.describe();
 console.log(it);
 
 accounting.addReport('Something');
-accounting.printReports();
 
 accounting.addEmployee('Max');
 accounting.addEmployee('Manu');
 accounting.mostRecentReport = 'Something example';
 console.log(accounting.mostRecentReport);
 
+accounting.describe();
+
 const employee1 = Department.createEmployee('Max');
 
 const fiscalYear = Department.fiscalYear;
 
 console.log(employee1, fiscalYear);
-// it.printEmployeeInfomation();
 
+// accounting.printReports();
+// accounting.printEmployeeInfomation();
 // const accountingCopy = { name: 'Dummy', describe: accounting.describe };
 // accountingCopy.describe();
 // new Department('Sales').describe()
