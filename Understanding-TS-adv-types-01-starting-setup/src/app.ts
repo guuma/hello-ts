@@ -105,3 +105,19 @@ const birdObj = {
   type: 'bird',
   flyingSpeed: 5,
 };
+
+const paragraph = document.getElementById('message-output');
+console.log(paragraph, typeof paragraph);
+
+// const userInputElement = <HTMLInputElement>document.getElementById('user-input')!;
+const userInputElement = document.getElementById('user-input');
+
+function setInputValue(userInputElement: HTMLInputElement) {
+  if (userInputElement) {
+    (userInputElement as HTMLInputElement).value = 'Hello World';
+  } else {
+    console.log('Can not find  userInputElement');
+  }
+}
+
+setInputValue(userInputElement);
