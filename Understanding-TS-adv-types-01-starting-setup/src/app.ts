@@ -110,14 +110,23 @@ const paragraph = document.getElementById('message-output');
 console.log(paragraph, typeof paragraph);
 
 // const userInputElement = <HTMLInputElement>document.getElementById('user-input')!;
-const userInputElement = document.getElementById('user-input');
+// const userInputElement = document.getElementById('user-input');
 
-function setInputValue(userInputElement: HTMLInputElement) {
-  if (userInputElement) {
-    (userInputElement as HTMLInputElement).value = 'Hello World';
-  } else {
-    console.log('Can not find  userInputElement');
-  }
+// function setInputValue(userInputElement: HTMLInputElement) {
+//   if (userInputElement) {
+//     (userInputElement as HTMLInputElement).value = 'Hello World';
+//   } else {
+//     console.log('Can not find  userInputElement');
+//   }
+// }
+
+// setInputValue(userInputElement);
+
+interface ErrorContainer {
+  [prop: string]: string;
 }
 
-setInputValue(userInputElement);
+const errorBag: ErrorContainer = {
+  email: 'Please enter the correct error message',
+  name: 'User-name cannot contain symbols'
+};
