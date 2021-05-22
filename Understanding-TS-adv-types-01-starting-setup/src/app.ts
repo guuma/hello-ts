@@ -33,7 +33,23 @@ function add(a: Combinable, b: Combinable): Combinable {
 }
 
 const result = add('Hello', 'TypeScript');
-console.log(result.split(""));
+console.log(result.split(''));
+
+const fetchedUserData = {
+  id: 'u1',
+  name: 'user1',
+  job: {
+    title: 'Developer',
+    description: 'TypeScript',
+  },
+};
+
+console.log(fetchedUserData?.job?.title);
+
+const userInput = 0
+const storedData = userInput ?? 'DEFAULT';
+
+console.log(storedData);
 
 // type UnknownEmployee = Employee | Admin;
 
