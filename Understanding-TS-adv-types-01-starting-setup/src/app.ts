@@ -102,8 +102,70 @@ function createCourseGoal(title: string, description: string, date: Date): Cours
   return courseGoal as CourseGoal;
 }
 
-
-
 const names: Readonly<string[]> = ['Max', 'Anna'];
-names.push('Manu');
+// names.push('Manu');
 console.log(names);
+
+function greeter(fn: (text: string) => void) {
+  fn('Hello, World');
+}
+
+function printToConsole(s: string) {
+  console.log(s);
+}
+
+greeter(printToConsole);
+
+// define functional type
+type DescribableFunction = {
+  description: string;
+  (someArg: number): boolean;
+};
+
+function doSomething(fn: DescribableFunction) {
+  console.log(`${fn.description} returned ${fn(6)}`);
+}
+
+// define constructor type
+// type SomeConstructor = {
+//   new (s: string): SomeObject;
+// };
+
+// function fn(ctor: SomeConstructor) {
+//   return new ctor('hello');
+// }
+
+// Generic Functions
+function map<Input, Output>(arr: Input[], func: (arg: Input) => Output): Output[] {
+  return arr.map(func);
+}
+
+console.log(map(['1', '2', '3'], (n) => parseInt(n)));
+
+// Generic Functions with Constraints
+function longest<Type extends { length: number }>(a: Type, b: Type) {
+  if (a.length >= b.length) {
+    return a;
+  } else {
+    return b;
+  }
+}
+
+// longerArray is of type 'number[]'
+const longerArray = longest([1, 2], [1, 2, 3]);
+
+// longerStirng is of type 'string'
+const longerString = longest('alice', 'bob');
+
+// Error! Numbers don't have a 'length' property
+// const notOK = longest(10, 100);
+
+// Generic Type inference
+function combine<T>(arr1: T[], arr2: T[]): T[] {
+  return arr1.concat(arr2);
+}
+
+const array1 = ['Mac', 'Nick'];
+const array2 = [1];
+
+console.log(combine<string | number>(array1, array2));
