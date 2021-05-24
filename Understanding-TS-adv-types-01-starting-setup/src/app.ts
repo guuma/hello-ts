@@ -169,3 +169,25 @@ const array1 = ['Mac', 'Nick'];
 const array2 = [1];
 
 console.log(combine<string | number>(array1, array2));
+
+interface Person {
+  name: string;
+  age: number;
+}
+
+interface ReadonlyPerson {
+  readonly name: string;
+  readonly age: number;
+}
+
+let writablePerson: Person = {
+  name: 'Person McPersonface',
+  age: 42,
+};
+
+// works
+let readonlyPerson: ReadonlyPerson = writablePerson;
+
+console.log(readonlyPerson.age); //prints 42
+writablePerson.age++;
+console.log(readonlyPerson.age); // prints 43
