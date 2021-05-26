@@ -1,193 +1,62 @@
-// const names: Array<string> = [];
-// names[0].split(' ');
-
-// const promise: Promise<any> = new Promise((resolve) => {
-//   setTimeout(() => {
-//     resolve('Success');
-//   }, 2000)
-// })
-
-// promise.then(data => {
-//   console.log(data)
-// })
-
-function merge<T extends object, U extends object>(objA: T, objB: U) {
-  return Object.assign(objA, objB);
+function Logger(logString: string) {
+  console.log('Logger: decorator factory');
+  return function (constructor: Function) {
+    console.log(logString);
+    console.log(constructor);
+  };
 }
 
-const mergedObj = merge({ name: 'Max', hobbies: ['Sports'] }, { age: 18 });
-
-console.log(mergedObj);
-
-interface Lengthy {
-  length: number;
-}
-
-function countAndDescribe<T extends Lengthy>(element: T): [T, string] {
-  let descriptionText = 'No value available';
-  if (element.length > 0) {
-    descriptionText = '値は' + element.length + '個です';
-  }
-  return [element, descriptionText];
-}
-
-console.log(countAndDescribe('Good Work!!'));
-
-function extractAndConvert<T extends object, U extends keyof T>(obj: T, key: U) {
-  return 'Value: ' + obj[key];
-}
-
-extractAndConvert({ name: 'nick' }, 'name');
-
-class DataStorage<T extends string | number | boolean> {
-  private data: T[] = [];
-
-  addItem(item: T) {
-    this.data.push(item);
-  }
-
-  removeItem(item: T) {
-    if (this.data.indexOf(item) === -1) {
-      return;
+function WithTemplate(template: string, hookId: string) {
+  console.log('WithTemplate: decorator factory');
+  return function (constructor: any) {
+    console.log('@WithTemplete: Outputting log');
+    const hookEl = document.getElementById(hookId);
+    const p = new constructor();
+    if (hookEl) {
+      hookEl.innerHTML = template;
+      hookEl.querySelector('h1')!.textContent = p.name;
     }
-    this.data.splice(this.data.indexOf(item), 1);
-  }
+  };
+}
 
-  getItems() {
-    return [...this.data];
+@Logger('@Logger: Outputting log')
+@WithTemplate('<h1>Person Object</h1>', 'app')
+class Person {
+  name = 'Max';
+
+  constructor() {
+    console.log('Person object is being created...');
   }
 }
 
-const ary = [1, 2, 3];
-console.log(ary.indexOf(2));
+const pers = new Person();
 
-// const textStorage = new DataStorage<string>();
-// textStorage.addItem('Data1');
-// textStorage.addItem('Data2');
-// // textStorage.removeItem('Data1');
+console.log(pers);
 
-// console.log(textStorage.getItems());
+function Log(target: any, propertyName: string | Symbol) {
+  console.log('Property Decorator');
+  console.log(target, propertyName);
+}
 
-// const numberStorage = new DataStorage<number>();
-// numberStorage.addItem(1);
-// numberStorage.addItem(2);
-// console.log(numberStorage.getItems());
-
-const objStorage = new DataStorage<string>();
-// const obj = { name: 'Max' };
-// Argument of type '{ name: string; }' is not assignable to parameter of type 'string'
-// objStorage.addItem({ name: 'Max' });
-objStorage.addItem('Max');
-
-objStorage.removeItem('Max');
-console.log(objStorage.getItems());
-
-const objArray = [{ name: 'Max' }, { name: 'Manu' }];
-
-const objMax = { name: 'Max' };
-
-console.log(objArray.indexOf(objMax));
-
-interface CourseGoal {
+class Product {
+  @Log
   title: string;
-  description: string;
-  completeUntil: Date;
-}
+  private _price: number;
 
-function createCourseGoal(title: string, description: string, date: Date): CourseGoal {
-  let courseGoal: Partial<CourseGoal> = {};
-  courseGoal.title = title;
-  courseGoal.description = description;
-  courseGoal.completeUntil = date;
-  return courseGoal as CourseGoal;
-}
+  set price(val: number) {
+    if (val > 0) {
+      this._price = val;
+    } else {
+      throw new Error('Incorrect price. Cannot set price below 0.');
+    }
+  }
 
-const names: Readonly<string[]> = ['Max', 'Anna'];
-// names.push('Manu');
-console.log(names);
+  constructor(t: string, p: number) {
+    this.title = t;
+    this._price = p;
+  }
 
-function greeter(fn: (text: string) => void) {
-  fn('Hello, World');
-}
-
-function printToConsole(s: string) {
-  console.log(s);
-}
-
-greeter(printToConsole);
-
-// define functional type
-type DescribableFunction = {
-  description: string;
-  (someArg: number): boolean;
-};
-
-function doSomething(fn: DescribableFunction) {
-  console.log(`${fn.description} returned ${fn(6)}`);
-}
-
-// define constructor type
-// type SomeConstructor = {
-//   new (s: string): SomeObject;
-// };
-
-// function fn(ctor: SomeConstructor) {
-//   return new ctor('hello');
-// }
-
-// Generic Functions
-function map<Input, Output>(arr: Input[], func: (arg: Input) => Output): Output[] {
-  return arr.map(func);
-}
-
-console.log(map(['1', '2', '3'], (n) => parseInt(n)));
-
-// Generic Functions with Constraints
-function longest<Type extends { length: number }>(a: Type, b: Type) {
-  if (a.length >= b.length) {
-    return a;
-  } else {
-    return b;
+  getPriceWithTax(tax: number) {
+    return this._price * (1 + tax);
   }
 }
-
-// longerArray is of type 'number[]'
-const longerArray = longest([1, 2], [1, 2, 3]);
-
-// longerStirng is of type 'string'
-const longerString = longest('alice', 'bob');
-
-// Error! Numbers don't have a 'length' property
-// const notOK = longest(10, 100);
-
-// Generic Type inference
-function combine<T>(arr1: T[], arr2: T[]): T[] {
-  return arr1.concat(arr2);
-}
-
-const array1 = ['Mac', 'Nick'];
-const array2 = [1];
-
-console.log(combine<string | number>(array1, array2));
-
-interface Person {
-  name: string;
-  age: number;
-}
-
-interface ReadonlyPerson {
-  readonly name: string;
-  readonly age: number;
-}
-
-let writablePerson: Person = {
-  name: 'Person McPersonface',
-  age: 42,
-};
-
-// works
-let readonlyPerson: ReadonlyPerson = writablePerson;
-
-console.log(readonlyPerson.age); //prints 42
-writablePerson.age++;
-console.log(readonlyPerson.age); // prints 43
