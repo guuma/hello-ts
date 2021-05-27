@@ -8,14 +8,18 @@ function Logger(logString: string) {
 
 function WithTemplate(template: string, hookId: string) {
   console.log('WithTemplate: decorator factory');
-  return function (constructor: any) {
-    console.log('@WithTemplete: Outputting log');
-    const hookEl = document.getElementById(hookId);
-    const p = new constructor();
-    if (hookEl) {
-      hookEl.innerHTML = template;
-      hookEl.querySelector('h1')!.textContent = p.name;
-    }
+  return function <T extends { new (...args: any[]): { name: string } }>(originalConstructor: T) {
+    return class extends originalConstructor {
+      constructor(..._: any[]) {
+        super();
+        console.log('@WithTemplete: Outputting log');
+        const hookEl = document.getElementById(hookId);
+        if (hookEl) {
+          hookEl.innerHTML = template;
+          hookEl.querySelector('h1')!.textContent = this.name;
+        }
+      }
+    };
   };
 }
 
@@ -29,20 +33,44 @@ class Person {
   }
 }
 
-const pers = new Person();
+// const pers = new Person();
 
-console.log(pers);
+// console.log(pers);
 
 function Log(target: any, propertyName: string | Symbol) {
   console.log('Property Decorator');
   console.log(target, propertyName);
 }
 
+function Log2(target: any, name: string, descriptor: PropertyDescriptor) {
+  console.log('Accessor Decorator');
+  console.log(target);
+  console.log(name);
+  console.log(descriptor);
+}
+
+function Log3(target: any, name: string, descriptor: PropertyDescriptor) {
+  console.log('Method Decorator');
+  console.log(target);
+  console.log(name);
+  console.log(descriptor);
+}
+
+function Log4(target: any, name: string | Symbol, position: number) {
+  console.log('Parametor Decorator');
+  console.log(target);
+  console.log(name);
+  console.log(position);
+}
+
 class Product {
+  // Property Decorator
   @Log
   title: string;
   private _price: number;
 
+  // Accessor Decorator
+  @Log2
   set price(val: number) {
     if (val > 0) {
       this._price = val;
@@ -56,7 +84,8 @@ class Product {
     this._price = p;
   }
 
-  getPriceWithTax(tax: number) {
+  @Log3
+  getPriceWithTax(@Log4 tax: number) {
     return this._price * (1 + tax);
   }
 }
