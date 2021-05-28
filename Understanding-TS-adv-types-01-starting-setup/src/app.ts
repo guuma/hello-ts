@@ -89,3 +89,112 @@ class Product {
     return this._price * (1 + tax);
   }
 }
+
+function Autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
+  const originalMethod = descriptor.value;
+  console.log(descriptor);
+  const adjDescriptor: PropertyDescriptor = {
+    configurable: true,
+    enumerable: false,
+    get() {
+      const boundFn = originalMethod.bind(this);
+      console.log(this);
+      return boundFn;
+    },
+  };
+  return adjDescriptor;
+}
+
+class Printer {
+  message = 'Click!!';
+
+  @Autobind
+  showMessage() {
+    console.log(this.message);
+  }
+}
+
+const p = new Printer();
+
+const btnEle = document.querySelector('button');
+
+btnEle?.addEventListener('click', p.showMessage);
+
+class Course {
+  title: string;
+  price: number;
+
+  constructor(title: string, price: number) {
+    @Required
+    this.title = title;
+    @PositiveNumber
+    this.price = price;
+  }
+}
+
+// function formValidation(titleVal: string, priceVal: number) {
+//   console.log(titleVal, priceVal);
+// }
+
+type ValidatorConfig = {
+  [prop: string]: {
+    [validatableProp: string]: string[]; // ['required', 'positive']
+  };
+};
+
+const registerdValidators: ValidatorConfig = {};
+
+function Required(target: any, propName: string) {
+  registerdValidators[target.constructor.name] = {
+    ...registerdValidators[target.constructor.name],
+    [propName]: ['required'],
+  };
+  console.log(registerdValidators);
+}
+
+function PositiveNumber(target: any, propName: string) {
+  registerdValidators[target.constructor.name] = {
+    [propName]: ['positive'],
+  };
+}
+
+function validate(obj: any): boolean {
+  const objValidatorConfig = registerdValidators[obj.constructor.name];
+  if (!objValidatorConfig) {
+    return true;
+  }
+  let isValid = true;
+  for (const prop in objValidatorConfig) {
+    console.log(prop);
+    for (const validator of objValidatorConfig[prop]) {
+      switch (validator) {
+        case 'required':
+          isValid = isValid && !!obj[prop];
+          break;
+        case 'positive':
+          isValid = isValid && obj[prop] > 0;
+          break;
+      }
+    }
+  }
+  return isValid;
+}
+
+const courseForm = document.querySelector('form');
+courseForm?.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const titleEl = document.getElementById('title') as HTMLInputElement;
+  const priceEl = document.getElementById('price') as HTMLInputElement;
+
+  const titleVal = titleEl.value;
+  const priceVal = +priceEl.value;
+
+  console.log(titleVal.trim());
+  const createdCourse = new Course(titleVal, priceVal);
+
+  if (!validate(createdCourse)) {
+    throw new Error('Validate Error!!');
+    return;
+  }
+  // console.log(createdCourse);
+});
