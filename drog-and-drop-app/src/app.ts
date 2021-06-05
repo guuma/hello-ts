@@ -1,10 +1,9 @@
 // autobind decorator
-function autobind(_target: any, _methodName: string, descriptor: PropertyDescriptor) {
+function autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
   const originalMethod = descriptor.value;
   const adjDescriptor: PropertyDescriptor = {
     configurable: true,
     get() {
-      // only get value
       const boundFn = originalMethod.bind(this);
       return boundFn;
     },
@@ -12,6 +11,7 @@ function autobind(_target: any, _methodName: string, descriptor: PropertyDescrip
   return adjDescriptor;
 }
 
+// ProjectInput Class
 class ProjectInput {
   templateElement: HTMLTemplateElement;
   hostElement: HTMLDivElement;
@@ -21,16 +21,16 @@ class ProjectInput {
   mandayInputElement: HTMLInputElement;
 
   constructor() {
-    this.templateElement = <HTMLTemplateElement>document.getElementById('project-input')!;
-    this.hostElement = <HTMLDivElement>document.getElementById('app')!;
+    this.templateElement = document.getElementById('project-input')! as HTMLTemplateElement;
+    this.hostElement = document.getElementById('app')! as HTMLDivElement;
 
     const importedNode = document.importNode(this.templateElement.content, true);
-    this.element = <HTMLFormElement>importedNode.firstElementChild;
+    this.element = importedNode.firstElementChild as HTMLFormElement;
     this.element.id = 'user-input';
 
-    this.titleInputElement = <HTMLInputElement>this.element.querySelector('#title');
-    this.descriptionInputElement = <HTMLInputElement>this.element.querySelector('#description');
-    this.mandayInputElement = <HTMLInputElement>this.element.querySelector('#manday');
+    this.titleInputElement = this.element.querySelector('#title') as HTMLInputElement;
+    this.descriptionInputElement = this.element.querySelector('#description') as HTMLInputElement;
+    this.mandayInputElement = this.element.querySelector('#manday') as HTMLInputElement;
 
     this.configure();
     this.attach();
@@ -39,31 +39,38 @@ class ProjectInput {
   private gatherUserInput(): [string, string, number] | void {
     const enteredTitle = this.titleInputElement.value;
     const enteredDescription = this.descriptionInputElement.value;
-    const enteredMandy = this.mandayInputElement.value;
+    const enteredManday = this.mandayInputElement.value;
     if (
       enteredTitle.trim().length === 0 ||
       enteredDescription.trim().length === 0 ||
-      enteredMandy.trim().length === 0
+      enteredManday.trim().length === 0
     ) {
-      alert('Input value is not correct');
+      alert('入力値が正しくありません。再度お試しください。');
       return;
     } else {
-      return [enteredTitle, enteredDescription, +enteredMandy];
+      return [enteredTitle, enteredDescription, +enteredManday];
     }
+  }
+
+  private clearInputs() {
+    this.titleInputElement.value = '';
+    this.descriptionInputElement.value = '';
+    this.mandayInputElement.value = '';
   }
 
   @autobind
   private submitHandler(event: Event) {
-    event.preventDefault;
+    event.preventDefault();
     const userInput = this.gatherUserInput();
     if (Array.isArray(userInput)) {
-      const [title, desc, mandy] = userInput;
-      console.log(title, desc, mandy);
+      const [title, desc, manday] = userInput;
+      console.log(title, desc, manday);
+      this.clearInputs();
     }
   }
 
   private configure() {
-    this.element.addEventListener('submit', this.submitHandler.bind(this));
+    this.element.addEventListener('submit', this.submitHandler);
   }
 
   private attach() {
