@@ -45,7 +45,6 @@ class ProjectState {
     }
   }
 }
-
 const projectState = ProjectState.getInstance();
 
 type Validatable = {
@@ -85,6 +84,24 @@ function autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
     },
   };
   return adjDescriptor;
+}
+
+// Component Class
+class Component<T extends HTMLElement, U extends HTMLElement> {
+  templateElement: HTMLTemplateElement;
+  hostElement: T;
+  element: U;
+
+  constructor(templateId: string, hostElementId: string, newElementId?: string) {
+    this.templateElement = document.getElementById(templateId)! as T;
+    this.hostElement = document.getElementById('app')! as HTMLDivElement;
+
+		const importedNode = document.importNode(this.templateElement.content, true);
+    this.element = importedNode.firstElementChild as HTMLElement;
+    this.element.id = 'user-input';
+
+    this.element.id = `${this.type}-projects`;
+  }
 }
 
 // ProjectList Class
