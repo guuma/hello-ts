@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="app.css" />
     <script src="dist/app.js" defer></script>
   </head>
-  <body>
     <template id="project-input">
       <form>
         <div class="form-control">
@@ -24,11 +23,15 @@
           <label for="manday">人日</label>
           <input type="number" id="manday" step="1" min="0" max="10000" />
         </div>
-        <button type="submit">プロジェクト追加</button>
+        <button type="">プロジェクト追加</button>
       </form>
     </template>
     <template id="single-project">
-      <li></li>
+      <li draggable="true">
+				<h2></h2>
+				<h3></h3>
+				<p></p>
+			</li>
     </template>
     <template id="project-list">
       <section class="projects">
